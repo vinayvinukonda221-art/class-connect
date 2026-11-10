@@ -1,6 +1,6 @@
 import axios from 'axios';
 // Dynamic API and Server URLs supporting development and production deployments
-export const SERVER_URL = import.meta.env.VITE_API_URL 
+export const SERVER_URL = import.meta.env.VITE_API_URL
     ? import.meta.env.VITE_API_URL.replace(/\/$/, '')
     : (typeof window !== 'undefined' && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1'
         ? window.location.origin
