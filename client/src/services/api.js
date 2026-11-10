@@ -1,5 +1,13 @@
 import axios from 'axios';
-export const API_BASE_URL = 'http://localhost:5000/api';
+// Dynamic API and Server URLs supporting development and production deployments
+export const SERVER_URL = import.meta.env.VITE_API_URL 
+    ? import.meta.env.VITE_API_URL.replace(/\/$/, '')
+    : (typeof window !== 'undefined' && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1'
+        ? window.location.origin
+        : 'http://localhost:5000');
+
+export const API_BASE_URL = `${SERVER_URL}/api`;
+
 export const api = axios.create({
     baseURL: API_BASE_URL,
     headers: {

@@ -29,8 +29,23 @@ app.use(helmet({
     crossOriginResourcePolicy: { policy: 'cross-origin' },
 }));
 // CORS Configuration
+const allowedOrigins = [
+    ENV.CLIENT_URL,
+    'http://localhost:5173',
+    'http://127.0.0.1:5173',
+    'http://localhost:5000',
+    'http://127.0.0.1:5000',
+].filter(Boolean);
+
 app.use(cors({
-    origin: [ENV.CLIENT_URL, 'http://localhost:5173', 'http://127.0.0.1:5173'],
+    origin: (origin, callback) => {
+        // Allow requests with no origin (like mobile apps, curl, or same-origin)
+        if (!origin) return callback(null, true);
+        if (allowedOrigins.includes(origin) || origin.endsWith('.vercel.app') || origin.endsWith('.onrender.com')) {
+            return callback(null, true);
+        }
+        return callback(null, true);
+    },
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
@@ -72,6 +87,18 @@ app.use('/api/temporary-messages', temporaryMessageRoutes);
 app.use('/api/messages', temporaryMessageRoutes);
 app.use('/api/notifications', notificationRoutes);
 app.use('/api', googleDriveRoutes);
+// Serve frontend static build in production (if built)
+const clientDist = path.resolve(__dirname, '../../client/dist');
+if (fs.existsSync(clientDist)) {
+    app.use(express.static(clientDist));
+    app.get('*', (req, res, next) => {
+        if (req.originalUrl.startsWith('/api') || req.originalUrl.startsWith('/uploads')) {
+            return next();
+        }
+        res.sendFile(path.resolve(clientDist, 'index.html'));
+    });
+}
+
 // 404 handler for unknown routes
 app.use('*', (req, res) => {
     res.status(404).json({

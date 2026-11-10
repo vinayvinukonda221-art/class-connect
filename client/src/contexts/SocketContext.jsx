@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { io } from 'socket.io-client';
 import { useAuth } from './AuthContext';
+import { SERVER_URL, API_BASE_URL } from '../services/api';
 const SocketContext = createContext(undefined);
 export const SocketProvider = ({ children }) => {
     const { token, isAuthenticated } = useAuth();
@@ -15,7 +16,7 @@ export const SocketProvider = ({ children }) => {
         if (!token)
             return;
         try {
-            const res = await fetch('http://localhost:5000/api/notifications', {
+            const res = await fetch(`${API_BASE_URL}/notifications`, {
                 headers: { Authorization: `Bearer ${token}` },
             });
             const data = await res.json();
@@ -33,7 +34,7 @@ export const SocketProvider = ({ children }) => {
         if (!token)
             return;
         try {
-            const res = await fetch('http://localhost:5000/api/temporary-messages/messages', {
+            const res = await fetch(`${API_BASE_URL}/temporary-messages/messages`, {
                 headers: { Authorization: `Bearer ${token}` },
             });
             const data = await res.json();
@@ -56,7 +57,7 @@ export const SocketProvider = ({ children }) => {
         }
         refreshNotifications();
         refreshMessages();
-        const newSocket = io('http://localhost:5000', {
+        const newSocket = io(SERVER_URL, {
             auth: { token },
             transports: ['websocket', 'polling'],
         });
@@ -109,7 +110,7 @@ export const SocketProvider = ({ children }) => {
         if (!token)
             return;
         try {
-            await fetch('http://localhost:5000/api/temporary-messages/messages', {
+            await fetch(`${API_BASE_URL}/temporary-messages/messages`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -136,7 +137,7 @@ export const SocketProvider = ({ children }) => {
         if (!token)
             return;
         try {
-            await fetch(`http://localhost:5000/api/notifications/notifications/${id}/read`, {
+            await fetch(`${API_BASE_URL}/notifications/notifications/${id}/read`, {
                 method: 'PATCH',
                 headers: { Authorization: `Bearer ${token}` },
             });
@@ -151,7 +152,7 @@ export const SocketProvider = ({ children }) => {
         if (!token)
             return;
         try {
-            await fetch('http://localhost:5000/api/notifications/notifications/read-all', {
+            await fetch(`${API_BASE_URL}/notifications/notifications/read-all`, {
                 method: 'POST',
                 headers: { Authorization: `Bearer ${token}` },
             });

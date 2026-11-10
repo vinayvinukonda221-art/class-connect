@@ -1,0 +1,22 @@
+services:
+  - type: web
+    name: class-connect
+    env: node
+    plan: free
+    buildCommand: npm run build
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: ALLOWED_SECTION
+        value: 21
+      - key: UNIVERSITY_NAME
+        value: "Vignan's Foundation for Science, Technology and Research (VFSTR)"
+      - key: DEPARTMENT_NAME
+        value: "Computer Science and Engineering"
+      - key: JWT_SECRET
+        generateValue: true
+      - key: MONGODB_URI
+        sync: false
