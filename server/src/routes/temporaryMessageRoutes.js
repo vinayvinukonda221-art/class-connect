@@ -1,0 +1,12 @@
+import { Router } from 'express';
+import { getTemporaryMessages, postTemporaryMessage, deleteTemporaryMessage, } from '../controllers/temporaryMessageController.js';
+import { authenticate, requireApproved } from '../middleware/auth.js';
+const router = Router();
+router.use(authenticate, requireApproved);
+router.get('/', getTemporaryMessages);
+router.post('/', postTemporaryMessage);
+router.get('/messages', getTemporaryMessages);
+router.post('/messages', postTemporaryMessage);
+router.delete('/messages/:messageId', deleteTemporaryMessage);
+router.delete('/:messageId', deleteTemporaryMessage);
+export default router;
