@@ -20,3 +20,13 @@ services:
         generateValue: true
       - key: MONGODB_URI
         sync: false
+      - key: GOOGLE_CLIENT_ID
+        value: 765852818290-hss283e58ump2bfrd2ss2ahftjiqqg95.apps.googleusercontent.com
+      - key: INITIAL_ADMIN_NAME
+        value: Vinay
+      - key: INITIAL_ADMIN_EMAIL
+        value: vinayvinukonda221@gmail.com
+      - key: INITIAL_ADMIN_PASSWORD
+        value: classconnect@2026
+      - key: INITIAL_ADMIN_ROLL
+        value: 241FA04693
